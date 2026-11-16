@@ -276,7 +276,7 @@ footer{text-align:center;color:#b8a597;font-size:12.5px;padding:30px 0 40px;lett
   <section id="v-home">
     <div class="hero">
       <h1 id="title">恋爱日记</h1>
-      <div class="names"><b id="nA">雨琪</b> <span class="heart">♥</span> <b id="nB">他</b></div>
+      <div class="names"><b id="nA">龙龙</b> <span class="heart">♥</span> <b id="nB">77</b></div>
       <div id="clockBox">
         <div class="clock-l">我们已经在一起</div>
         <div class="clock">
@@ -419,7 +419,7 @@ function lookup(raw){
   if(WORLD[n])return{name:null,prov:null,lng:WORLD[n][0],lat:WORLD[n][1]};
   return null;
 }
-const DEF={title:"恋爱日记",nameA:"雨琪",nameB:"他",startDate:""};
+const DEF={title:"恋爱日记",nameA:"龙龙",nameB:"77",startDate:""};
 const HEART='path://M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z';
 
 let db=null,assets=null,canWrite=true,preview=false;
@@ -462,7 +462,7 @@ function applyOp(d,op){
   else if(op.t==='photos')d.places=d.places.map(p=>p.id===op.pid?{...p,photos:[...(p.photos||[]),...op.photos]}:p);
 }
 function snapshot(){return{cfg,places,wishes,days,notes}}
-function adopt(d){queue.forEach(q=>applyOp(d,q.op));cfg=d.cfg;places=d.places;wishes=d.wishes;days=d.days;notes=d.notes;renderAll()}
+function adopt(d){queue.forEach(q=>applyOp(d,q.op));cfg=d.cfg;try{localStorage.setItem('love-cfg',JSON.stringify(d.cfg))}catch(_){}places=d.places;wishes=d.wishes;days=d.days;notes=d.notes;renderAll()}
 function setSync(s){const el=$('#sync');el.className=s==='err'?'err':'';el.textContent=s==='saving'?'保存中…':s==='err'?'没保存上，点这里重试':s==='ok'?'已保存 ✓':''}
 function enqueue(op,files,dels){const d=snapshot();applyOp(d,op);cfg=d.cfg;places=d.places;wishes=d.wishes;days=d.days;notes=d.notes;renderAll();
   queue.push({op,files:files||[],dels:dels||[]});flush()}
@@ -900,6 +900,7 @@ $('#gGo').onclick=async()=>{
   if(!o||!r||!t){$('#gErr').textContent='两项都要填哦';return}
   $('#gGo').disabled=true;$('#gErr').textContent='正在连接…';await connect({o,r,t});$('#gGo').disabled=false;
 };
+try{const c0=JSON.parse(localStorage.getItem('love-cfg')||'null');if(c0)cfg={...DEF,...c0}}catch(_){}
 renderAll();
 (async()=>{
   let c=null;
